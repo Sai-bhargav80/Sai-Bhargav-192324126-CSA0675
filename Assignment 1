@@ -1,0 +1,111 @@
+1.def twoSum(nums, target):
+    num_dict = {}
+    for i, num in enumerate(nums):
+        if num in num_dict:
+            return [num_dict[num], i]
+        num_dict[target - num] = i
+2.class ListNode:
+    def _init_(self, val=0, next=None):
+        self.val = val
+        self.next = next
+def addTwoNumbers(l1, l2):
+    dummy = ListNode()
+    current = dummy
+    carry = 0
+    while l1 or l2 or carry:
+        x = l1.val if l1 else 0
+        y = l2.val if l2 else 0
+        sum_val = x + y + carry
+        carry = sum_val // 10
+        current.next = ListNode(sum_val % 10)
+        current = current.next
+        l1 = l1.next if l1 else None
+        l2 = l2.next if l2 else None
+    return dummy.next
+3.def lengthOfLongestSubstring(s):
+    char_set = set()
+    l = 0
+    res = 0
+    for r in range(len(s)):
+        while s[r] in char_set:
+            char_set.remove(s[l])
+            l += 1
+        char_set.add(s[r])
+        res = max(res, r - l + 1)
+    return res
+4.def findMedianSortedArrays(nums1, nums2):
+    merged = sorted(nums1 + nums2)
+    n = len(merged)
+    return merged[n // 2] if n % 2 else (merged[n // 2 - 1] + merged[n // 2]) / 2
+5.def longestPalindrome(s):
+    def expand_around_center(s, left, right):
+        while left >= 0 and right < len(s) and s[left] == s[right]:
+            left -= 1
+            right += 1
+        return s[left + 1:right]
+    longest = ""
+    for i in range(len(s)):
+        palindrome1 = expand_around_center(s, i, i)
+        palindrome2 = expand_around_center(s, i, i + 1)
+        if len(palindrome1) > len(longest):
+            longest = palindrome1
+        if len(palindrome2) > len(longest):
+            longest = palindrome2
+    return longest
+6.def convert(s, numRows):
+    if numRows == 1 or numRows >= len(s):
+        return s
+    result = [''] * numRows
+    index, step = 0, 1
+    for char in s:
+        result[index] += char
+        if index == 0:
+            step = 1
+        elif index == numRows - 1:
+            step = -1
+        index += step
+    return ''.join(result)
+7.def reverse(x):
+    negative = False
+    if x < 0:
+        x, negative = -x, True
+    reversed_num = 0
+    while x:
+        reversed_num = reversed_num * 10 + x % 10
+        x //= 10
+    if negative:
+        reversed_num = -reversed_num
+    return reversed_num if -2*31 <= reversed_num <= 2*31 - 1 else 0
+8.def myAtoi(s):
+    s = s.lstrip()
+    if not s:
+        return 0
+    sign = 1
+    if s[0] in ('-', '+'):
+        sign = -1 if s[0] == '-' else 1
+        s = s[1:]
+    result = 0
+    for char in s:
+        if not char.isdigit():
+            break
+        result = result * 10 + int(char)
+    result *= sign
+    return max(-2*31, min(result, 2*31 - 1))
+9.def isPalindrome(x):
+    if x < 0:
+        return False
+    reversed_num = 0
+    original_num = x
+    while x:
+        x //= 10
+        reversed_num = reversed_num * 10 + x % 10
+    return original_num == reversed_num
+10.def isMatch(s, p):
+    if not p:
+        return not s
+    first_match = bool(s) and p[0] in {s[0], '.'}
+    if len(p) >= 2 and p[1] == '*':
+        return (isMatch(s, p[2:]) or
+                first_match and isMatch(s[1:], p))
+    else:
+        return first_match and isMatch(s[1:], p[1:])
