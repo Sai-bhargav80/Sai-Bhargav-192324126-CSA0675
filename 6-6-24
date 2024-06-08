@@ -1,0 +1,122 @@
+1.def fibonacci(n):
+    if n <= 0:
+        return "Input should be positive integer."
+    elif n == 1:
+        return 0
+    elif n == 2:
+        return 1
+    else:
+        return fibonacci(n-1) + fibonacci(n-2)
+n = int(input("Enter the number of terms: "))
+for i in range(1, n+1):
+    print(fibonacci(i))
+
+2. def is_armstrong(n):
+    if n < 0:
+        return "Input should be a positive integer."
+    elif n < 10:
+        return True
+    else:
+        digits = [int(digit) for digit in str(n)]
+        return n == sum([digit ** len(str(n)) for digit in digits])
+num = int(input("Enter a number: "))
+if is_armstrong(num):
+    print(f"{num} is an Armstrong number.")
+else:
+    print(f"{num} is not an Armstrong number.")
+
+3. def gcd(a, b):
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
+num1 = int(input("Enter the first number: "))
+num2 = int(input("Enter the second number: "))
+print(f"GCD of {num1} and {num2} is {gcd(num1, num2)}")
+
+4. def largest_element(arr):
+    return max(arr)
+arr = list(map(int, input("Enter the array elements separated by space: ").split()))
+print(f"Largest element in the array is {largest_element(arr)}")
+
+5.  def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n-1)
+num = int(input("Enter a number: "))
+print(f"Factorial of {num} is {factorial(num)}")
+
+6. def copy_string(str1, str2):
+    if len(str1) == 0:
+        return str2
+    else:
+        return copy_string(str1[1:], str2 + str1[0])
+str1 = input("Enter the first string: ")
+str2 = ""
+print(f"Copy of {str1} is {copy_string(str1, str2)}")
+
+7.def reverse_string(str1):
+    if len(str1) == 0:
+        return str1
+    else:
+        return reverse_string(str1[1:]) + str1[0]
+str1 = input("Enter the string: ")
+print(f"Reverse of {str1} is {reverse_string(str1)}")
+
+8. def is_prime(n):
+    if n <= 1:
+        return False
+    elif n <= 3:
+        return True
+    elif n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+def generate_primes(n):
+    if n <= 1:
+        return []
+    elif n <= 3:
+        return [2, 3]
+    else:
+        primes = generate_primes(n-1)
+        if is_prime(n):
+            primes.append(n)
+        return primes
+n = int(input("Enter the number of primes: "))
+print(f"First {n} prime numbers are {generate_primes(n)}")
+
+9. def is_prime(n):
+    if n <= 1:
+        return False
+    elif n <= 3:
+        return True
+    elif n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+num = int(input("Enter a number: "))
+if is_prime(num):
+    print(f"{num} is a prime number.")
+else:
+    print(f"{num} is not a prime number.")
+
+10.def is_palindrome(str1):
+   if len(str1) <= 1:
+       return True
+   else:
+       return str1[0] == str1[-1] and is_palindrome(str1[1:-1])
+str1 = input("Enter the string: ")
+if is_palindrome(str1):
+   print(f"{str1} is a palindrome.")
+else:
+   print(f"{str1} is not a palindrome.")
+
