@@ -1,0 +1,101 @@
+1. def countElements(arr):
+    count = 0
+    for x in set(arr):
+        if x + 1 in arr:
+            count += arr.count(x)
+    return count
+
+2. def stringShift(s, shift):
+    for direction, amount in shift:
+        if direction == 0:
+            s = s[amount:] + s[:amount]
+        else:
+            s = s[-amount:] + s[:-amount]
+    return s
+
+3. def leftMostColumnWithOne(binaryMatrix):
+    rows, cols = binaryMatrix.dimensions()
+    row, col = 0, cols - 1
+    while row < rows and col >= 0:
+        if binaryMatrix.get(row, col) == 1:
+            col -= 1
+        else:
+            row += 1
+    return col + 1 if col != cols - 1 else -1
+
+4.  from collections import deque, Counter
+
+class FirstUnique:
+    def _init_(self, nums):
+        self.queue = deque(nums)
+        self.count = Counter(nums)
+        self.unique = deque(x for x in nums if self.count[x] == 1)
+
+    def showFirstUnique(self):
+        return self.unique[0] if self.unique else -1
+
+    def add(self, value):
+        self.queue.append(value)
+        self.count[value] += 1
+        if self.count[value] == 1:
+            self.unique.append(value)
+        else:
+            while self.unique and self.count[self.unique[0]] > 1:
+                self.unique.popleft()
+
+5. def isValidSequence(root, arr):
+    def dfs(node, idx):
+        if not node or idx == len(arr) or node.val != arr[idx]:
+            return idx == len(arr) and not node
+        return dfs(node.left, idx + 1) or dfs(node.right, idx + 1)
+    return dfs(root, 0)
+
+6. def kidsWithCandies(candies, extraCandies):
+    max_candies = max(candies)
+    return [candy + extraCandies >= max_candies for candy in candies]
+
+7. def maxDiff(num):
+    digits = list(str(num))
+    x, y = digits[0], '9'
+    for i in range(len(digits)):
+        if digits[i] == x:
+            digits[i] = y
+            break
+    a = int(''.join(digits))
+    digits = list(str(num))
+    x, y = digits[0], '1' if digits[0] != '1' else '9'
+    for i in range(len(digits)):
+        if digits[i] == x:
+            digits[i] = y
+            break
+    b = int(''.join(digits))
+    
+    return a - b
+
+8. def checkIfCanBreak(s1, s2):
+    s1, s2 = sorted(s1), sorted(s2)
+    return all(a >= b for a, b in zip(s1, s2)) or all(a <= b for a, b in zip(s1, s2))
+
+9.  def numberWays(hats):
+    n = len(hats)
+    mod = 10 ** 9 + 7
+    dp = [[0] * (1 << n) for _ in range(41)]
+    dp[0][0] = 1
+    
+    for hat in range(1, 41):
+        for mask in range(1 << n):
+            dp[hat][mask] = dp[hat - 1][mask]
+            for person in range(n):
+                if mask & (1 << person) and hat in hats[person]:
+                    dp[hat][mask] += dp[hat - 1][mask ^ (1 << person)]
+                    dp[hat][mask] %= mod
+    
+    return dp[40][(1 << n) - 1]
+
+10. def destCity(paths):
+    cities = set()
+    for path in paths:
+        cities.add(path[0])
+    for path in paths:
+        if path[1] not in cities:
+            return path[1]
