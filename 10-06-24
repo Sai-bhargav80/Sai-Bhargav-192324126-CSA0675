@@ -1,5 +1,3 @@
-10
-
 1.MERGE TWO SORTED LISTS
 Algorithm:
 *Base Case: If either list is empty, return the other list.
