@@ -1,89 +1,92 @@
-1. Odd String Difference   
-   def oddString(words):
-    n = len(words[0])
-    diffs = []
+ASS4
+1.OLD STRING DIFFERENCE
+Algorithm:
+*Initialize Difference Array: Initialize a difference array diff with the same length as the first word.
+*Calculate Differences: Calculate the difference array for each word in the input list.
+*Find Odd Word: Find the word whose difference array does not match the initial difference array.
+*Return Odd Word: Return the odd word.
+CODE:
+def oddString(words):
+    diff = [None] * len(words[0])
     for word in words:
-        diff = [ord(word[i+1]) - ord(word[i]) for i in range(n-1)]
-        diffs.append(diff)    
-    for i in range(len(diffs)):
-        if diffs[i] != diffs[0] and diffs[i] != diffs[-1]:
-            return words[i]    
-    return words[-1]
-
-2. Words Within Two Edits of Dictionary    
-   def twoEditWords(queries, dictionary):
+        diff_word = [word[i+1] - word[i] for i in range(len(word)-1)]
+        if diff_word != diff:
+            return word
+    return None
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2.WORDS WITHIN TWO EDITS OF DICTIONARY
+Algorithm:
+*Iterate through Queries: Iterate through each query in the queries array.
+*Iterate through Dictionary: Iterate through each word in the dictionary array.
+*Compare Query and Word: Compare the query and word by counting the number of different letters.
+*Check for Two Edits: Check if the number of different letters is less than or equal to 2.
+*Add to Result: If the number of different letters is less than or equal to 2, add the query to the result list.
+*Return Result: Return the result list.
+CODE:
+def findAndReplaceWord(queries, dictionary):
     result = []
     for query in queries:
         for word in dictionary:
-            diff = sum(1 for i in range(len(query)) if query[i] != word[i])
+            if len(query) != len(word):
+                continue
+            diff = 0
+            for i in range(len(query)):
+                if query[i] != word[i]:
+                    diff += 1
+                if diff > 2:
+                    break
             if diff <= 2:
                 result.append(query)
                 break
     return result
-
-3.  Destroy Sequential Targets   
-  def destroyTargets(nums, space):
-    nums.sort()
-    max_count = 0
-    min_seed = float('inf')    
-    for seed in nums:
-        count = 0
-        for target in nums:
-            if (target - seed) % space == 0:
-                count += 1
-        if count > max_count or (count == max_count and seed < min_seed):
-            max_count = count
-            min_seed = seed    
-    return min_seed
-
-4.  Minimum Addition to Make Integer Beautiful
-   def makeIntegerBeautiful(n, target):
-    digits = list(str(n))
-    digit_sum = sum(int(d) for d in digits)    
-    if digit_sum <= target:
-        return 0    
-    add = 0
-    while digit_sum > target:
-        add += 10 - int(digits[-1])
-        digits.pop()
-        digit_sum -= int(digits[-1]) if digits else 0    
-    return add
-
-5. Sort Array by Moving Items to Empty Space
-   def minimumOperations(nums):
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3.NEXT GREATER ELEMENT IV
+Algorithm:
+*Initialize Result Array: Initialize an array result of size n with all elements set to -1.
+*Iterate through Array: Iterate through each element nums[i] in the array.
+*Find First Greater Element: Find the first greater element nums[j] to the right of nums[i].
+*Find Second Greater Element: Find the second greater element nums[k] to the right of nums[i] such that nums[k] > nums[i] and nums[k] > nums[j].
+*Update Result: Update result[i] with the second greater element nums[k].
+*Return Result: Return the result array.
+CODE:
+def secondGreaterElement(nums):
+    result = [-1] * len(nums)
+    for i in range(len(nums)):
+        for j in range(i + 1, len(nums)):
+            if nums[j] > nums[i]:
+                for k in range(j + 1, len(nums)):
+                    if nums[k] > nums[i] and nums[k] > nums[j]:
+                        result[i] = nums[k]
+                        break
+                break
+    return result
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4.MINIMUM ADDITION TO MAKE INTEGER BEAUTIFUL
+Algorithm:
+*Convert to String: Convert the integer n to a string.
+*Calculate Digit Sum: Calculate the sum of the digits in the string.
+*Check if Beautiful: Check if the digit sum is less than or equal to the target.
+*Increment and Repeat: If not, increment n by 1 and repeat the process.
+*Return: Return the minimum non-negative integer n that is beautiful.
+CODE:
+def makeBeautiful(n, target):
+    while sum(int(digit) for digit in str(n)) > target:
+        n += 1
+    return n
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5.SORT ARRAY BY MOVING ITEMS TO EMPTY SPACE:
+Algorithm:
+*Count Operations: Initialize a variable operations to 0.
+*Iterate through Array: Iterate through the array nums.
+*Check if Item is at Correct Position: Check if the item at index i is at the correct position (i.e., nums[i] == i).
+*Increment Operations: If the item is not at the correct position, increment operations by 1.
+*Return Operations: Return the total number of operations needed to sort the array
+CODE:
+def min_operations(nums):
     n = len(nums)
-    empty = nums.index(0)
-    operations = 0    
-    for i in range(empty):
-        if nums[i] != i+1:
-            for j in range(i+1, empty):
-                if nums[j] == i+1:
-                    nums[j], nums[empty] = nums[empty], nums[j]
-                    empty = j
-                    operations += 1
-                    break    
-    for i in range(empty+1, n):
+    operations = 0
+    for i in range(n):
         if nums[i] != i:
-            for j in range(i+1, n):
-                if nums[j] == i:
-                    nums[j], nums[empty] = nums[empty], nums[j]
-                    empty = j
-                    operations += 1
-                    break    
+            operations += 1
     return operations
-
-6. Apply Operations to an Array
-
-  def applyOperations(nums):
-    n = len(nums)
-    
-    for i in range(n-1):
-        if nums[i] == nums[i+1]:
-            nums[i] *= 2
-            nums[i+1] = 0
-    
-    zeros = nums.count(0)
-    nums = [num for num in nums if num != 0]
-    nums.extend([0] * zeros)
-    
-    return nums
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
