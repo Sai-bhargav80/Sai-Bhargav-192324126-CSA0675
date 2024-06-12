@@ -1,0 +1,249 @@
+1. Merge Two Sorted Lists
+
+class ListNode:
+    def _init_(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def mergeTwoLists(list1: ListNode, list2: ListNode) -> ListNode:
+    dummy = ListNode()
+    curr = dummy
+    
+    while list1 and list2:
+        if list1.val < list2.val:
+            curr.next = list1
+            list1 = list1.next
+        else:
+            curr.next = list2
+            list2 = list2.next
+        curr = curr.next
+    
+    if list1:
+        curr.next = list1
+    elif list2:
+        curr.next = list2
+    
+    return dummy.next
+
+2. Merge k Sorted Lists
+
+import heapq
+
+class ListNode:
+    def _init_(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def mergeKLists(lists: List[ListNode]) -> ListNode:
+    dummy = ListNode()
+    curr = dummy
+    heap = []
+    
+    for i in range(len(lists)):
+        if lists[i]:
+            heapq.heappush(heap, (lists[i].val, i, lists[i]))
+    
+    while heap:
+        val, i, node = heapq.heappop(heap)
+        curr.next = node
+        curr = curr.next
+        node = node.next
+        if node:
+            heapq.heappush(heap, (node.val, i, node))
+    
+    return dummy.next
+
+
+3.Remove Duplicates from Sorted Array
+def removeDuplicates(nums: List[int]) -> int:
+    if not nums:
+        return 0
+    
+    k = 1
+    for i in range(1, len(nums)):
+        if nums[i] != nums[i-1]:
+            nums[k] = nums[i]
+            k += 1
+    
+    return k
+
+
+4. Search in Rotated Sorted Array
+def search(nums: List[int], target: int) -> int:
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        
+        if nums[mid] == target:
+            return mid
+        
+        if nums[left] <= nums[mid]:
+            if nums[left] <= target < nums[mid]:
+                right = mid - 1
+            else:
+                left = mid + 1
+        else:
+            if nums[mid] < target <= nums[right]:
+                left = mid + 1
+            else:
+                right = mid - 1
+    
+    return -1
+
+5. Find First and Last Position of Element in Sorted Array
+def searchRange(nums: List[int], target: int) -> List[int]:
+    left = bisect_left(nums, target)
+    if left == len(nums) or nums[left] != target:
+        return [-1, -1]
+    right = bisect_right(nums, target) - 1
+    return [left, right]
+
+6. Sort Colors
+def sortColors(nums: List[int]) -> None:
+    low, mid, high = 0, 0, len(nums) - 1
+    
+    while mid <= high:
+        if nums[mid] == 0:
+            nums[low], nums[mid] = nums[mid], nums[low]
+            low += 1
+            mid += 1
+        elif nums[mid] == 1:
+            mid += 1
+        else:
+            nums[mid], nums[high] = nums[high], nums[mid]
+            high -= 1
+
+7.Remove Duplicates from Sorted List
+
+ class ListNode:
+    def _init_(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+def deleteDuplicates(head: ListNode) -> ListNode:
+    if not head or not head.next:
+        return head
+    
+    curr = head
+    while curr.next:
+        if curr.val == curr.next.val:
+            curr.next = curr.next.next
+        else:
+            curr = curr.next
+    
+    return head
+
+
+8.Merge Sorted Array
+
+ def merge(nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+    i, j = m - 1, n - 1
+    k = m + n - 1
+    
+    while i >= 0 and j >= 0:
+        if nums1[i] > nums2[j]:
+            nums1[k] = nums1[i]
+            i -= 1
+        else:
+            nums1[k] = nums2[j]
+            j -= 1
+        k -= 1    
+    while j >= 0:
+        nums1[k] = nums2[j]
+        j -= 1
+        k -= 1
+
+9. Convert Sorted Array to Binary Search Tree
+ class TreeNode:
+    def _init_(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+def sortedArrayToBST(nums: List[int]) -> TreeNode:
+    if not nums:
+        return None    
+    mid = len(nums) // 2
+    root = TreeNode(nums[mid])
+    root.left = sortedArrayToBST(nums[:mid])
+    root.right = sortedArrayToBST(nums[mid+1:])    
+    return root
+
+10.Insertion Sort List
+
+ class ListNode:
+    def _init_(self, val=0, next=None):
+        self.val = val
+        self.next = next
+def insertionSortList(head: ListNode) -> ListNode:
+    dummy = ListNode()
+    curr = head    
+    while curr:
+        prev = dummy
+        while prev.next and prev.next.val < curr.val:
+            prev = prev.next
+        next_node = curr.next
+        curr.next = prev.next
+        prev.next = curr
+        curr = next_node    
+    return dummy.next
+
+11.Sort Characters By Frequency
+
+ from collections import Counter
+def frequencySort(s: str) -> str:
+    freq = Counter(s)
+    buckets = [[] for _ in range(len(s)+1)]    
+    for char, count in freq.items():
+        buckets[count].append(char)    
+    result = []
+    for i in range(len(buckets)-1, -1, -1):
+        for char in buckets[i]:
+            result.append(char * i)    
+    return ''.join(result)
+
+12.Max Chunks To Make Sorted
+
+def maxChunksToSorted(arr: List[int]) -> int:
+    chunks = 0
+    max_so_far = 0    
+    for i in range(len(arr)):
+        max_so_far = max(max_so_far, arr[i])
+        if max_so_far == i:
+            chunks += 1    
+    return chunks
+
+
+13.Intersection of Three Sorted Arrays
+
+def arraysIntersection(arr1: List[int], arr2: List[int], arr3: List[int]) -> List[int]:
+    i, j, k = 0, 0, 0
+    result = []    
+    while i < len(arr1) and j < len(arr2) and k < len(arr3):
+        if arr1[i] == arr2[j] == arr3[k]:
+            result.append(arr1[i])
+            i += 1
+            j += 1
+            k += 1
+        elif arr1[i] <= arr2[j] and arr1[i] <= arr3[k]:
+            i += 1
+        elif arr2[j] <= arr1[i] and arr2[j] <= arr3[k]:
+            j += 1
+        else:
+            k += 1    
+    return result
+
+14.Sort the Matrix Diagonally
+
+def diagonalSort(mat: List[List[int]]) -> List[List[int]]:
+    m, n = len(mat), len(mat[0])    
+    for offset in range(-(n-1), m):
+        diagonal = []
+        for i in range(max(0, -offset), min(m, n-offset)):
+            diagonal.append(mat[i][i+offset])
+        diagonal.sort()        
+        k = 0
+        for i in range(max(0, -offset), min(m, n-offset)):
+            mat[i][i+offset] = diagonal[k]
+            k += 1    
+    return mat
