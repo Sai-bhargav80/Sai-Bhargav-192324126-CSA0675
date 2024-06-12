@@ -1,83 +1,98 @@
-1. Merge Two Sorted Lists
+10
 
+1.MERGE TWO SORTED LISTS
+Algorithm:
+*Base Case: If either list is empty, return the other list.
+*Compare Values: Compare the values of the current nodes in both lists.
+*Merge: If the value in the first list is smaller, move to the next node in the first list. If the value in the second list is smaller, move to the next node in the second list.
+*Recursion: Repeat steps 2 and 3 until one of the lists becomes empty.
+*Return: Return the merged list.
+CODE:
 class ListNode:
-    def _init_(self, val=0, next=None):
+    def init(self, val=0, next=None):
         self.val = val
         self.next = next
+class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
+        if not list1:
+            return list2
+        if not list2:
+            return list1
 
-def mergeTwoLists(list1: ListNode, list2: ListNode) -> ListNode:
-    dummy = ListNode()
-    curr = dummy
-    
-    while list1 and list2:
         if list1.val < list2.val:
-            curr.next = list1
-            list1 = list1.next
+            list1.next = self.mergeTwoLists(list1.next, list2)
+            return list1
         else:
-            curr.next = list2
-            list2 = list2.next
-        curr = curr.next
-    
-    if list1:
-        curr.next = list1
-    elif list2:
-        curr.next = list2
-    
-    return dummy.next
-
-2. Merge k Sorted Lists
-
+            list2.next = self.mergeTwoLists(list1, list2.next)
+            return list2
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2.MERGE K SORTED LIST
+Algorithm:
+*Create a Dummy Node: Create a dummy node to simplify the process of merging the lists.
+*Create a Heap: Create a heap to store the smallest value from each list.
+*Pop Values from Heap: Pop the smallest value from the heap and add it to the merged list.
+*Update the Heap: Update the heap by pushing the next value from the same list.
+*Repeat: Repeat steps 3 and 4 until the heap is empty.
+*Return: Return the merged list.
+CODE:
 import heapq
-
 class ListNode:
-    def _init_(self, val=0, next=None):
+    def init(self, val=0, next=None):
         self.val = val
         self.next = next
-
-def mergeKLists(lists: List[ListNode]) -> ListNode:
-    dummy = ListNode()
-    curr = dummy
-    heap = []
-    
-    for i in range(len(lists)):
-        if lists[i]:
-            heapq.heappush(heap, (lists[i].val, i, lists[i]))
-    
-    while heap:
-        val, i, node = heapq.heappop(heap)
-        curr.next = node
-        curr = curr.next
-        node = node.next
-        if node:
-            heapq.heappush(heap, (node.val, i, node))
-    
-    return dummy.next
-
-
-3.Remove Duplicates from Sorted Array
-def removeDuplicates(nums: List[int]) -> int:
-    if not nums:
+class Solution:
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        dummy = ListNode()
+        current = dummy
+        heap = []
+        for i in range(len(lists)):
+            if lists[i]:
+                heapq.heappush(heap, (lists[i].val, i))
+        while heap:
+            val, i = heapq.heappop(heap)
+            current.next = ListNode(val)
+            current = current.next
+            if lists[i].next:
+                lists[i] = lists[i].next
+                heapq.heappush(heap, (lists[i].val, i))
+        return dummy.next
+        --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  3.REMOVE DUPLICATES FROM SORTED LIST
+  Algorithm:
+*Check for Empty List: If the input list is empty, return 0.
+*Initialize Pointer: Initialize a pointer i to the first element of the list.
+*Iterate through List: Iterate through the list starting from the second element.
+*Check for Duplicates: If the current element is different from the previous one, move the pointer i forward and update the value at i.
+*Return: Return the position of the last uniq
+  CODE:
+  def removeDuplicates(nums):
+    if len(nums) == 0:
         return 0
-    
-    k = 1
-    for i in range(1, len(nums)):
-        if nums[i] != nums[i-1]:
-            nums[k] = nums[i]
-            k += 1
-    
-    return k
-
-
-4. Search in Rotated Sorted Array
-def search(nums: List[int], target: int) -> int:
+    i = 0
+    for j in range(1, len(nums)):
+        if nums[j] != nums[i]:
+            i += 1
+            nums[i] = nums[j]
+    return i + 1
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4.SEARCH ROATED SORT ARRAY
+Algorithm:
+*Check for Empty List: If the input list is empty, return -1.
+*Initialize Pointers: Initialize two pointers, left and right, to the start and end of the list.
+*Binary Search: Perform a binary search on the list.
+*Check for Target: If the middle element is the target, return its index.
+*Adjust Pointers: Adjust the pointers based on whether the left half or right half of the list is sorted.
+*Repeat: Repeat steps 3-5 until the target is found or the pointers cross.
+*Return: Return -1 if the target is not found.
+CODE:
+def search(nums, target):
+    if not nums:
+        return -1
     left, right = 0, len(nums) - 1
-    
     while left <= right:
         mid = (left + right) // 2
-        
         if nums[mid] == target:
             return mid
-        
         if nums[left] <= nums[mid]:
             if nums[left] <= target < nums[mid]:
                 right = mid - 1
@@ -88,21 +103,61 @@ def search(nums: List[int], target: int) -> int:
                 left = mid + 1
             else:
                 right = mid - 1
-    
     return -1
-
-5. Find First and Last Position of Element in Sorted Array
-def searchRange(nums: List[int], target: int) -> List[int]:
-    left = bisect_left(nums, target)
-    if left == len(nums) or nums[left] != target:
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5.FIND FIRST AND LAST POSITION OF ELEMENT IN ARRAY
+Algorithm:
+*Check for Empty List: If the input list is empty, return [-1, -1].
+*Initialize Pointers: Initialize two pointers, left and right, to the start and end of the list.
+*Binary Search: Perform a binary search on the list.
+*Update Indices: If the middle element is the target, update the left_index and right_index variables.
+*Adjust Pointers: Adjust the pointers based on whether the middle element is less than or greater than the target.
+*Repeat: Repeat steps 3-5 until the target is found or the pointers cross.
+*Return: Return the indices if the target is found; otherwise, return [-1, -1].
+CODE:
+def searchRange(nums, target):
+    if not nums:
         return [-1, -1]
-    right = bisect_right(nums, target) - 1
-    return [left, right]
-
-6. Sort Colors
-def sortColors(nums: List[int]) -> None:
+    left, right = 0, len(nums) - 1
+    left_index = -1
+    right_index = -1
+    while left <= right:
+        mid = (left + right) // 2
+        if nums[mid] == target:
+            if left_index == -1:
+                left_index = mid
+            right_index = mid
+            left += 1
+            right -= 1
+        elif nums[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    if left_index == -1:
+        return [-1, -1]
+    if right_index == -1:
+        right_index = left_index
+    return [left_index, right_index]
+    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+6.SORT COLOURS
+Algorithm:
+*Initialize Pointers: Initialize three pointers: low, mid, and high.
+*low points to the start of the array
+*mid points to the current element being processed
+*high points to the end of the array
+*Iterate through the Array: While mid is less than or equal to high:
+*If the current element is 0:
+*Swap it with the element at low
+*Increment low and mid
+*If the current element is 1:
+*Increment mid
+*If the current element is 2:
+*Swap it with the element at high
+*Decrement high
+*Return: Return the sorted array.
+CODE:
+def sortColors(nums):
     low, mid, high = 0, 0, len(nums) - 1
-    
     while mid <= high:
         if nums[mid] == 0:
             nums[low], nums[mid] = nums[mid], nums[low]
@@ -113,34 +168,52 @@ def sortColors(nums: List[int]) -> None:
         else:
             nums[mid], nums[high] = nums[high], nums[mid]
             high -= 1
-
-7.Remove Duplicates from Sorted List
-
- class ListNode:
-    def _init_(self, val=0, next=None):
+    return nums
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+7.REMOVE DUPLICATES FROM SORTED LIST
+Algorithm:
+*Check for Empty List: If the input list is empty, return None.
+*Initialize Pointer: Initialize a pointer current to the head of the list.
+*Iterate through List: While current and current.next exist:
+*If current.val is equal to current.next.val, remove current.next from the list.
+*If current.val is not equal to current.next.val, move current to current.next.
+*Return: Return the modified list.
+*This algorithm iterates through the list, checking for duplicate values. If a duplicate is found, it is removed from the list. 
+*The algorithm ensures that the list remains sorted by only removing duplicates.
+CODE:
+class ListNode:
+    def init(self, val=0, next=None):
         self.val = val
         self.next = next
-
-def deleteDuplicates(head: ListNode) -> ListNode:
-    if not head or not head.next:
+class Solution:
+    def deleteDuplicates(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head:
+            return None
+        current = head
+        while current and current.next:
+            if current.val == current.next.val:
+                current.next = current.next.next
+            else:
+                current = current.next
         return head
-    
-    curr = head
-    while curr.next:
-        if curr.val == curr.next.val:
-            curr.next = curr.next.next
-        else:
-            curr = curr.next
-    
-    return head
-
-
-8.Merge Sorted Array
-
- def merge(nums1: List[int], m: int, nums2: List[int], n: int) -> None:
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+8.MERGE SORTED ARRAY
+Algorithm:
+*Initialize Pointers: Initialize three pointers: i, j, and k.
+*i points to the last element of the merged part of nums1
+*j points to the last element of nums2
+*k points to the last element of the combined array
+*Merge from the End: While i and j are greater than or equal to 0:
+*Compare the elements at nums1[i] and nums2[j].
+*Place the larger element at nums1[k].
+*Decrement i, j, and k.
+*Handle Remaining Elements: If there are any remaining elements in nums2:
+*Place them at the beginning of nums1.
+*Decrement j and k.
+CODE:
+def merge(nums1, m, nums2, n):
     i, j = m - 1, n - 1
     k = m + n - 1
-    
     while i >= 0 and j >= 0:
         if nums1[i] > nums2[j]:
             nums1[k] = nums1[i]
@@ -148,102 +221,60 @@ def deleteDuplicates(head: ListNode) -> ListNode:
         else:
             nums1[k] = nums2[j]
             j -= 1
-        k -= 1    
+        k -= 1
     while j >= 0:
         nums1[k] = nums2[j]
         j -= 1
         k -= 1
-
-9. Convert Sorted Array to Binary Search Tree
- class TreeNode:
-    def _init_(self, val=0, left=None, right=None):
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+9.CONVERT SORTED ARRAY INTO BINARY SEARCH TREE
+Algorithm:
+*Base Case: If the input array is empty, return None.
+*Find Middle Element: Find the middle element of the array.
+*Create Root Node: Create a new node with the middle element as the value.
+*Recursively Create Left and Right Subtrees: Recursively create the left and right subtrees by calling the function on the left and right halves of the array.
+*Return Root Node: Return the root node of the binary search tree.
+CODE:
+class TreeNode:
+    def init(self, val=0, left=None, right=None):
         self.val = val
         self.left = left
         self.right = right
-def sortedArrayToBST(nums: List[int]) -> TreeNode:
-    if not nums:
-        return None    
-    mid = len(nums) // 2
-    root = TreeNode(nums[mid])
-    root.left = sortedArrayToBST(nums[:mid])
-    root.right = sortedArrayToBST(nums[mid+1:])    
-    return root
-
-10.Insertion Sort List
-
- class ListNode:
-    def _init_(self, val=0, next=None):
+class Solution:
+    def sortedArrayToBST(self, nums):
+        if not nums:
+            return None
+        mid = len(nums) // 2
+        root = TreeNode(nums[mid])
+        root.left = self.sortedArrayToBST(nums[:mid])
+        root.right = self.sortedArrayToBST(nums[mid+1:])
+        return root
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+10.INSERTION SHORT LIST
+Algorithm:
+*Create Dummy Node: Create a dummy node to simplify the process of inserting elements.
+*Initialize Current Node: Initialize a pointer current to the head of the list.
+*Iterate through List: While current exists:
+*Find Insertion Point: Find the position where the current element should be inserted.
+*Insert Element: Insert the current element at the found position.
+*Move to Next Element: Move current to the next element.
+*Return: Return the sorted list.
+CODE:
+class ListNode:
+    def init(self, val=0, next=None):
         self.val = val
         self.next = next
-def insertionSortList(head: ListNode) -> ListNode:
-    dummy = ListNode()
-    curr = head    
-    while curr:
-        prev = dummy
-        while prev.next and prev.next.val < curr.val:
-            prev = prev.next
-        next_node = curr.next
-        curr.next = prev.next
-        prev.next = curr
-        curr = next_node    
-    return dummy.next
-
-11.Sort Characters By Frequency
-
- from collections import Counter
-def frequencySort(s: str) -> str:
-    freq = Counter(s)
-    buckets = [[] for _ in range(len(s)+1)]    
-    for char, count in freq.items():
-        buckets[count].append(char)    
-    result = []
-    for i in range(len(buckets)-1, -1, -1):
-        for char in buckets[i]:
-            result.append(char * i)    
-    return ''.join(result)
-
-12.Max Chunks To Make Sorted
-
-def maxChunksToSorted(arr: List[int]) -> int:
-    chunks = 0
-    max_so_far = 0    
-    for i in range(len(arr)):
-        max_so_far = max(max_so_far, arr[i])
-        if max_so_far == i:
-            chunks += 1    
-    return chunks
-
-
-13.Intersection of Three Sorted Arrays
-
-def arraysIntersection(arr1: List[int], arr2: List[int], arr3: List[int]) -> List[int]:
-    i, j, k = 0, 0, 0
-    result = []    
-    while i < len(arr1) and j < len(arr2) and k < len(arr3):
-        if arr1[i] == arr2[j] == arr3[k]:
-            result.append(arr1[i])
-            i += 1
-            j += 1
-            k += 1
-        elif arr1[i] <= arr2[j] and arr1[i] <= arr3[k]:
-            i += 1
-        elif arr2[j] <= arr1[i] and arr2[j] <= arr3[k]:
-            j += 1
-        else:
-            k += 1    
-    return result
-
-14.Sort the Matrix Diagonally
-
-def diagonalSort(mat: List[List[int]]) -> List[List[int]]:
-    m, n = len(mat), len(mat[0])    
-    for offset in range(-(n-1), m):
-        diagonal = []
-        for i in range(max(0, -offset), min(m, n-offset)):
-            diagonal.append(mat[i][i+offset])
-        diagonal.sort()        
-        k = 0
-        for i in range(max(0, -offset), min(m, n-offset)):
-            mat[i][i+offset] = diagonal[k]
-            k += 1    
-    return mat
+class Solution:
+    def insertionSortList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        dummy = ListNode()
+        current = head
+        while current:
+            prev = dummy
+            while prev.next and prev.next.val < current.val:
+                prev = prev.next
+            temp = current.next
+            current.next = prev.next
+            prev.next = current
+            current = temp
+        return dummy.next
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
