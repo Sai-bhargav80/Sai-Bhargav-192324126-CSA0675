@@ -1,5 +1,3 @@
-ASS 5
-
 1.TWO SUM
 Algorithm:
 *Initialize Dictionary: Create an empty dictionary num_dict to store the numbers and their indices.
