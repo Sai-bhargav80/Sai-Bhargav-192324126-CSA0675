@@ -1,0 +1,243 @@
+1. Remove element:
+Algorithm:
+Initialize two pointers, i and j, to the start of the array.
+Traverse the array using the pointers. If the element at i is equal to the value to be removed (val), increment i to skip the element.
+If i is not equal to j, shift the element at j to the position i and increment j.
+Return j as the new length of the array.
+Code;
+def removeElement(nums, val):
+    if not nums:
+        return 0
+
+    i = 0
+    for j in range(len(nums)):
+        if nums[j] != val:
+            nums[i] = nums[j]
+            i += 1
+
+    return i
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2. Sudoku Validator:
+Algorithm:
+ Initialize a 2D array board to store the Sudoku board.
+ Check each row for the presence of all digits from 1 to 9 without repetition.
+ Check each column for the presence of all digits from 1 to 9 without repetition.
+ Check each 3x3 sub-box for the presence of all digits from 1 to 9 without repetition.
+ Return True if all checks pass, False otherwise.
+ Code:
+ def solveSudoku(board):
+    def is_valid(board, row, col, num):
+        for i in range(9):
+            if board[row][i] == str(num):
+                return False
+        for i in range(9):
+            if board[i][col] == str(num):
+                return False
+        start_row, start_col = row - row % 3, col - col % 3
+        for i in range(3):
+            for j in range(3):
+                if board[i + start_row][j + start_col] == str(num):
+                    return False
+        return True
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. Sudoku Solver:
+Algorithm:
+ Initialize a 2D array board to store the Sudoku board.
+ Find the first empty cell in the board.
+ Try each number from 1 to 9 in the empty cell. If a number is valid, fill it in and recursively solve the board.
+ If a number is not valid, backtrack and try the next number.
+ Return the solved board.     
+ Code:
+ def solve(board):
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == '.':
+                    for num in range(1, 10):
+                        if is_valid(board, i, j, num):
+                            board[i][j] = str(num)
+                            if solve(board):
+                                return True
+                            board[i][j] = '.'
+                    return False
+        return True
+
+    solve(board)
+    return board
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4. Count and Say:
+Algorithm:
+ If n is 1, return the string "1".
+ Generate the next string by iterating over the previous string and counting the occurrences of each digit.
+ Concatenate the counted digits to form the next string.
+ Repeat steps 2 and 3 until n is reached.
+ Return the `n`th term of the count-and-say sequence.
+ COde:
+   python
+def countAndSay(n):
+    if n == 1:
+        return '1'
+
+    prev = countAndSay(n - 1)
+    res = ''
+    i = 0
+    while i < len(prev):
+        count = 1
+        while i + 1 < len(prev) and prev[i] == prev[i + 1]:
+            i += 1
+            count += 1
+        res += str(count) + prev[i]
+        i += 1
+
+    return res
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+5. Combination Sum:
+Algorithm:
+ Initialize an empty list result to store the combinations.
+ Define a recursive function to generate combinations. Start with the first candidate and recursively generate combinations for the remaining candidates.
+ Check if the sum of the current combination equals the target. If it does, add it to result.
+ If the sum is greater than the target, backtrack and try the next candidate.
+ Return result containing all combinations that sum up to the target.
+ Code:
+ python
+def combinationSum(candidates, target):
+    def backtrack(remain, comb, start):
+        if remain == 0:
+            result.append(list(comb))
+            return
+        for i in range(start, len(candidates)):
+            if candidates[i] > remain:
+                break
+            comb.append(candidates[i])
+            backtrack(remain - candidates[i], comb, i)
+            comb.pop()
+
+    result = []
+    backtrack(target, [], 0)
+    return result
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+6. Combination Sum II:
+Algorithm:
+ Initialize an empty list result to store the combinations.
+ Define a recursive function to generate combinations. Start with the first candidate and recursively generate combinations for the remaining candidates.
+ Check if the sum of the current combination equals the target. If it does, add it to result.
+ If the sum is greater than the target, backtrack and try the next candidate.
+ Return result containing all combinations that sum up to the target.
+ Code:
+ def combinationSum2(candidates, target):
+    def backtrack(remain, comb, start):
+        if remain == 0:
+            result.append(list(comb))
+            return
+        for i in range(start, len(candidates)):
+            if candidates[i] > remain:
+                break
+            if i > start and candidates[i] == candidates[i - 1]:
+                continue
+            comb.append(candidates[i])
+            backtrack(remain - candidates[i], comb, i + 1)
+            comb.pop()
+
+    result = []
+    candidates.sort()
+    backtrack(target, [], 0)
+    return result
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+7. Permutations II:
+Algorithm:
+ Initialize an empty list result to store the permutations.
+ Define a recursive function to generate permutations. Start with the first element and recursively generate permutations for the remaining elements.
+ Check if the current permutation contains any duplicate elements. If it does, skip it.
+ Add the permutation to result.
+ Return result containing all unique permutations.
+ Code:
+ def permuteUnique(nums):
+    def backtrack(start, end):
+        if start == end:
+            result.append(nums[:])
+        for i in range(start, end):
+            if i > start and nums[i] == nums[i - 1]:
+                continue
+            nums[start], nums[i] = nums[i], nums[start]
+            backtrack(start + 1, end)
+            nums[start], nums[i] = nums[i], nums[start]
+
+    result = []
+    nums.sort()
+    backtrack(0, len(nums))
+    return result
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+8. Maximum Subarray:
+Algorithm:
+ Initialize variables max_sum and current_sum to store the maximum and current sum, respectively.
+ Traverse the array and calculate the sum of each subarray.
+ Update max_sum if the current sum is greater.
+ Return max_sum as the maximum sum of a subarray.
+ COde:
+ def maxSubArray(nums):
+    if not nums:
+        return 0
+
+    max_sum = nums[0]
+    current_sum = nums[0]
+    for num in nums[1:]:
+        current_sum = max(num, current_sum + num)
+        max_sum = max(max_sum, current_sum)
+
+    return max_sum
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+9. Length of Last Word:
+Algorithm:
+ Initialize a variable length to store the length of the last word.
+ Traverse the string from right to left and count the non-space characters.
+ Update length with the count.
+ Return length as the length of the last word.
+ Code:
+ def lengthOfLastWord(s):
+    return len(s.split()[-1])
+
+Permutation Sequence:
+python
+def getPermutation(n, k):
+    nums = [str(i) for i in range(1, n + 1)]
+    res = ''
+    k -= 1
+    while nums:
+        fact = math.factorial(len(nums) - 1)
+        index = k // fact
+        k %= fact
+        res += nums[index]
+        nums.pop(index)
+    return result
+    
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+10. Permutation Sequence:
+Algorithm:
+ Initialize a variable result to store the permutation sequence.
+ Define a recursive function to generate permutations. Start with the first number and recursively generate permutations for the remaining numbers.
+ Check if the current permutation is at the correct position. If it is, add it to result.
+ If the permutation is not at the correct position, backtrack and try the next permutation.
+ Return result containing the `k`th permutation sequence.
+ Code:
+ def getPermutation(n, k):
+   
+    nums = [str(i) for i in range(1, n+1)]
+       fact = [1] * (n+1)
+    for i in range(1, n+1):
+        fact[i] = fact[i-1] * i
+       result = ""
+       k -= 1
+       for i in range(n):
+           index = k // fact[n-i-1]
+        result += nums[index]
+           nums.pop(index)
+           k -= index * fact[n-i-1]
+       return result
