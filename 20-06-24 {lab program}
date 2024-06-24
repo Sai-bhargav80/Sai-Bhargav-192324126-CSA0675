@@ -41,7 +41,7 @@ for row in dp:
 ******************************************************************************************************************************************************************************
 
 2.
-AIM:GIVE ME ALGORITHM IN 5 POINTS AND CODE IN PYTHON
+AIM:to calculate the sum of the subset sums
 ALGORITHM:
 ->Initialization:
 Initialize a 2D array dp to store the subset sums.
