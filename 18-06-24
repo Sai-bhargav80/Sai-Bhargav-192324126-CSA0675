@@ -1,0 +1,246 @@
+1.
+Algorithm:
+-start the program.
+-This function takes an array nums as input and returns the minimum length of the array after applying the operation zero or more times. 
+-It uses two pointers, left and right, to track the indices of the array. 
+-The operation is applied by moving the pointers towards each other until they meet, and the length of the remaining array is calculated as right - left + 1.
+-stop the program after printing output.
+code:
+1st questiondef minLength(nums):
+    if not nums:
+        return 0
+
+    left, right = 0, len(nums) - 1
+    while left < right:
+        if nums[left] < nums[right]:
+            left += 1
+        else:
+            right -= 1
+    return right - left + 1
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2.
+Algorithm:
+-TreeNode class: Defines a basic structure for a node in a binary tree with attributes val, left, and right.
+-sortedArrayToBST(nums) function:
+-Takes a sorted integer array nums as input.
+-If nums is empty (not nums), returns None.
+-Finds the middle index mid of the array nums.
+-Creates a new TreeNode with the value nums[mid], which becomes the root of the subtree.
+-Recursively constructs the left subtree (root.left) using the left part of nums (nums[:mid]).
+-Recursively constructs the right subtree (root.right) using the right part of nums (nums[mid+1:]).
+-Returns root, which represents the root of the BST.
+-inorderTraversal(root) function:
+-Performs an inorder traversal of the BST rooted at root (left subtree, root, right subtree).
+-Prints each node's value in the BST in sorted order.
+code:
+class TreeNode:
+    def init(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+def sortedArrayToBST(nums):
+    if not nums:
+        return None
+    mid = len(nums) // 2
+    root = TreeNode(nums[mid])
+    root.left = sortedArrayToBST(nums[:mid])
+    root.right = sortedArrayToBST(nums[mid+1:])
+    return root
+def inorderTraversal(root):
+    if root:
+        inorderTraversal(root.left)
+        print(root.val, end=" ")
+        inorderTraversal(root.right)
+if name == "main":
+    nums = [-10, -3, 0, 5, 9]
+    root = sortedArrayToBST(nums)
+    print("Inorder traversal of the BST:")
+    inorderTraversal(root)
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+3.
+Algorithm:
+1. Initialize a result set: Use a set to store the substrings to avoid duplicates.
+2. Nested Loop: Iterate over each word in the array with an outer loop, and check if it is a substring of any other word using an inner loop.
+3. Substring Check: If the word is found to be a substring of another word, add it to the result set.
+4. Convert to List: Convert the result set to a list and return it.Result Set:
+5.Initialize an empty set to store substrings found.
+6. Outer Loop: Iterate over each word with index i.
+7. Inner Loop: For each word words[i], iterate over all other words with index j.
+   Substring Check: If words[i] is a substring of words[j] and i is not equal to j, add words[i] to the result set.
+8. Return Result: Convert the result set to a list and return it.
+code:
+def stringMatching(words):
+    result = set()
+    for i in range(len(words)):
+        for j in range(len(words)):
+            if i != j and words[i] in words[j]:
+                result.add(words[i])
+    return list(result)
+words = ["mass", "as", "hero", "superhero"]
+print(stringMatching(words)) 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4.
+Algorithm:
+1. Iterate through the array: Loop through the array from the first element to the second last element.
+2. Swap elements: For each element at index i, compare it with the next element at index i+1.
+   - If i is even and nums[i] is greater than nums[i+1], swap them.
+   - If i is odd and nums[i] is less than nums[i+1], swap them.
+3.Iterate through the array: Use a for loop to iterate through the array up to the second last element.
+4. Conditional Swap:
+   - If the index i is even, ensure nums[i] < nums[i+1]. If not, swap nums[i] and nums[i+1].
+   - If the index i is odd, ensure nums[i] > nums[i+1]. If not, swap nums[i] and nums[i+1].
+code:
+python
+def wiggleSort(nums):
+    for i in range(len(nums) - 1):
+        if (i % 2 == 0 and nums[i] > nums[i + 1]) or (i % 2 == 1 and nums[i] < nums[i + 1]):
+            nums[i], nums[i + 1] = nums[i + 1], nums[i]
+nums = [3, 5, 2, 1, 6, 4]
+wiggleSort(nums)
+print(nums)  
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5.
+Algorithm:
+1.Initialize the queue: Add all cells containing 0 to the queue initially and set their distance to 0 in the distance matrix.
+2. Set initial distances: For all cells containing 1, set their distance to infinity.
+3. BFS traversal: Process each cell in the queue, updating the distance of its neighbors if a shorter path is found, and add the neighbors to the queue. 
+4.Queue Initialization: All cells with 0 are enqueued and their distances set to 0.
+5. Distance Matrix: A matrix to store the shortest distance to the nearest 0.
+6. BFS Traversal: Dequeue a cell, check its four neighbors, update their distance if a shorter path is found, and enqueue the updated neighbors.
+7. Return Result: The updated distance matrix is returned after BFS completes.
+code:
+from collections import deque
+def updateMatrix(mat):
+    m, n = len(mat), len(mat[0])
+    distance = [[float('inf')] * n for _ in range(m)]
+    queue = deque()
+    for i in range(m):
+        for j in range(n):
+            if mat[i][j] == 0:
+                queue.append((i, j))
+                distance[i][j] = 0
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    while queue:
+        x, y = queue.popleft()
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < m and 0 <= ny < n:
+                if distance[nx][ny] > distance[x][y] + 1:
+                    distance[nx][ny] = distance[x][y] + 1
+                    queue.append((nx, ny))
+    return distance
+mat = [
+    [0,0,0],
+    [0,1,0],
+    [1,1,1]
+]
+print(updateMatrix(mat))
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+6.
+algorithm:
+Determine the length of the input array nums and store it in the variable n.
+Calculate the expected sum of all numbers in the range [0, n] using the formula for the sum of an arithmetic series: n * (n + 1) // 2.
+Calculate the actual sum of all numbers in the input array nums using the built-in sum() function.
+Subtract the actual sum from the expected sum to find the missing number.
+The time complexity of this solution is O(n), as we need to iterate through the 
+input array once to calculate the actual sum. The space complexity is O(1), as we only use a constant amount of extra space.
+code:
+def missingNumber(nums):
+    n = len(nums)
+    expected_sum = n * (n + 1) // 2
+    actual_sum = sum(nums)
+    return expected_sum - actual_sum
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+7.
+algorithm:
+Create a new matrix maxLocal of size (n - 2) x (n - 2) filled with zeros.
+Traversal: Iterate through each cell in maxLocal using nested loops. For each cell (i, j), calculate the maximum value in the corresponding 3 x 3 submatrix centered at (i + 1, j + 1) in the original grid.
+Local Max Calculation: For each cell in the 3 x 3 submatrix, find the maximum value. This is done by comparing the values at the current cell and its neighbors.
+Assignment: Store the maximum value found in the 3 x 3 submatrix at the corresponding position in maxLocal.
+Return: Return the generated maxLocal matrix.
+code:
+def largestLocal(grid):
+    n = len(grid)
+    maxLocal = [[0] * (n - 2) for _ in range(n - 2)]
+    for i in range(n - 2):
+        for j in range(n - 2):
+            localMax = max(grid[i][j], grid[i][j + 1], grid[i][j + 2])
+            localMax = max(localMax, grid[i + 1][j], grid[i + 1][j + 1], grid[i + 1][j + 2])
+            localMax = max(localMax, grid[i + 2][j], grid[i + 2][j + 1], grid[i + 2][j + 2])
+            maxLocal[i][j] = localMax
+    return maxLocal
+grid = [[9,9,8,1],[5,6,2,6],[8,2,6,4],[6,2,2,2]]
+print(largestLocal(grid))  # Output: [[9,9],[8,6]]
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+8.
+algorithm:
+nitialize a counter count to zero.
+Traversal: Iterate through each string word in the input array words.
+Prefix Check: Use the startswith() method to check if the current word starts with the given pref. If it does, increment the count.
+Return: Return the total count of strings that contain pref as a prefix.
+This algorithm efficiently checks each string in words to see if it starts with pref,
+and counts the number of matches. The time complexity is O(n), where n is the number of strings in words, and the space complexity is O(1),
+as we only use a constant amount of extra space.
+code:
+def prefixCount(words, pref):
+    count = 0
+    for word in words:
+        if word.startswith(pref):
+            count += 1
+    return count
+words = ["pay", "attention", "practice", "attend"]
+pref = "at"
+print(prefixCount(words, pref))   
+-------------------------------------------------------------------------------------------------------------------------------------------------
+9.
+algorithm:
+Create two sets, rows and cols, to store the indices of the rows and columns that contain a 0.
+Marking Rows and Columns: Iterate through the matrix and check if the current element is 0. 
+If it is, add the current row index to the rows set and the current column index to the cols set.
+Setting Zeroes: Iterate through the matrix again and check if the current row index is in the rows set or the current column index is in the cols set.
+If either condition is true, set the current element to 0.
+Return: Return the modified matrix.
+The key idea behind this solution is to use two sets to keep track of the rows and 
+columns that need to be set to 0. This allows us to iterate through the matrix twice, 
+first to mark the rows and columns, and then to set the corresponding elements to 0.
+code:
+def setZeroes(matrix):
+    m, n = len(matrix), len(matrix[0])
+    rows, cols = set(), set()
+    for i in range(m):
+        for j in range(n):
+            if matrix[i][j] == 0:
+                rows.add(i)
+                cols.add(j)
+    for i in range(m):
+        for j in range(n):
+            if i in rows or j in cols:
+                matrix[i][j] = 0
+    return matrix
+matrix = [[1, 1, 1], [1, 0, 1], [1, 1, 1]]
+print(setZeroes(matrix)) 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+10
+algorithm:
+ Convert the input arrays nums1 and nums2 to sets set1 and set2, respectively. This removes any duplicate elements from the arrays.
+Finding Intersection: Use the intersection() method of the set1 object to find the intersection of the two sets. 
+This method returns a new set containing the elements that are common to both set1 and set2.
+Conversion to List: Convert the resulting set back to a list and return it.
+The key idea behind this solution is to use sets to remove duplicates and find the intersection efficiently. 
+Sets are well-suited for this task because they provide constant-time lookup and membership testing, which makes the intersection operation very efficient.
+The time complexity of this solution is O(m + n), where m and n are the lengths of nums1 and nums2, respectively.
+This is because we need to convert the arrays to sets, which takes linear time, and then perform the intersection operation, which also takes linear time.
+The space complexity is O(m + n), as we need to store the elements of both arrays in the sets.
+code:
+def intersection(nums1, nums2):
+    set1 = set(nums1)
+    set2 = set(nums2)
+    result = set1.intersection(set2)
+    return list(result)
+nums1 = [1, 2, 2, 1]
+nums2 = [2, 2]
+print(intersection(nums1, nums2)) 
+nums1 = [4, 9, 5]
+nums2 = [9, 4, 9, 8, 4]
+print(intersection(nums1, nums2))
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
