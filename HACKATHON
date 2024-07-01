@@ -1,0 +1,219 @@
+1. GRAPH COLOURING:
+from collections import defaultdict
+def graph_coloring(graph):
+    colors = {}
+    vertices = sorted(graph, key=lambda x: len(graph[x]), reverse=True)
+    for vertex in vertices:
+        used_colors = set(colors.get(neighbor) for neighbor in graph[vertex])
+        for color in range(1, len(vertices)+1):
+            if color not in used_colors:
+                colors[vertex] = color
+                break
+    return colors
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B', 'D', 'E'], 
+    'D': ['B', 'C', 'E', 'F'],
+    'E': ['C', 'D', 'F'],
+    'F': ['D', 'E']
+}
+coloring = graph_coloring(graph)
+print(coloring)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2. MINIMUM AND MAXIMUM:
+A=[1,2,3,4,5,6]
+print(max(A))
+print(min(A))
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. ROB HOUSE:
+def rob(nums):
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
+    
+    def rob_helper(nums):
+        dp = [0] * len(nums)
+        dp[0] = nums[0]
+        dp[1] = max(nums[0], nums[1])
+        for i in range(2, len(nums)):
+            dp[i] = max(dp[i-1], dp[i-2] + nums[i])
+        return dp[-1]
+    return max(rob_helper(nums[:-1]), rob_helper(nums[1:]))
+nums = [1, 2, 3, 1]
+result = rob(nums)
+print(result)  
+nums = [2, 3, 2]
+result = rob(nums)
+print(result)  
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+4. SINGLE SOURCE SHORTEST PATH:
+import heapq
+def dijkstra(graph, source):
+    n = len(graph)
+    distances = [float('inf')] * n
+    distances[source] = 0
+    heap = [(0, source)]
+    while heap:
+        dist, node = heapq.heappop(heap)
+        
+        if dist > distances[node]:
+            continue
+        
+        for neighbor, weight in graph[node].items():
+            new_dist = dist + weight
+            if new_dist < distances[neighbor]:
+                distances[neighbor] = new_dist
+                heapq.heappush(heap, (new_dist, neighbor))
+    return distances
+graph = {
+    0: {1: 4, 2: 1},
+    1: {2: 2, 3: 3, 4: 2, 5: 3},
+    2: {1: 1, 3: 1, 4: 1},
+    3: {5: 1},
+    4: {3: 2, 5: 2},
+    5: {}
+}
+source = 0
+distances = dijkstra(graph, source)
+print(f"Shortest distances from source {source}:")
+for i in range(len(distances)):
+    print(f"Node {i}: {distances[i]}")
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+5.SELECTION SORT:
+def selection_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        min_idx = i
+        for j in range(i+1, n):
+            if arr[j] < arr[min_idx]:
+                min_idx = j
+        arr[i], arr[min_idx] = arr[min_idx], arr[i]
+    return arr
+num_elements = int(input("Enter the number of elements: "))
+arr = []
+for i in range(num_elements):
+    element = int(input(f"Enter element {i+1}: "))
+    arr.append(element)
+sorted_arr = selection_sort(arr)
+print("Sorted list:", sorted_arr)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+6. SEQUENTIAL SEARCH:
+def sequential_search(arr, target):
+    for i in range(len(arr)):
+        if arr[i] == target:
+            return i
+    return -1
+arr = [10, 20, 30, 40, 50]
+target = 30
+index = sequential_search(arr, target)
+print(f"Target {target} found at index {index}")
+target = 60
+index = sequential_search(arr, target)
+print(f"Target {target} found at index {index}")
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+7. BINARY SEARCH:
+def binary_search(arr, target):
+    left = 0
+    right = len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+arr = [10, 20, 30, 40, 50]
+target = 30
+index = binary_search(arr, target)
+print(f"Target {target} found at index {index}")
+target = 60
+index = binary_search(arr, target)
+print(f"Target {target} found at index {index}")
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+8. COMBINATION SUM-1:
+def binary_search(arr, target):
+    left = 0
+    right = len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target:
+            return mid
+        elif arr[mid] < target:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1
+arr = [10, 20, 30, 40, 50]
+target = 30
+index = binary_search(arr, target)
+print(f"Target {target} found at index {index}")
+target = 60
+index = binary_search(arr, target)
+print(f"Target {target} found at index {index}")
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+9.  MERGE SORT;
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = arr[:mid]
+    right = arr[mid:]
+    left = merge_sort(left)
+    right = merge_sort(right)
+    return merge(left, right)
+def merge(left, right):
+    result = []
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] < right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    result += left[i:]
+    result += right[j:]
+    return result
+arr = [5, 2, 8, 1, 9, 3]
+sorted_arr = merge_sort(arr)
+print(f"Sorted array: {sorted_arr}")
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+10.CLOSEST PAIR OF POINTS USING THE DIVIDE ADN CONQUER METHOD:
+import math
+def closest_pair(points):
+    if len(points) <= 3:
+        return brute_force(points)
+    mid = len(points) // 2
+    left = points[:mid]
+    right = points[mid:]
+    min_distance = min(closest_pair(left), closest_pair(right))
+    strip = [point for point in points if abs(point[0] - points[mid][0]) < min_distance]
+    strip.sort(key=lambda x: x[1])
+    for i in range(len(strip)):
+        for j in range(i + 1, min(i + 8, len(strip))):
+            min_distance = min(min_distance, distance(strip[i], strip[j]))
+    return min_distance
+def brute_force(points):
+    min_distance = float('inf')
+    for i in range(len(points)):
+        for j in range(i + 1, len(points)):
+            min_distance = min(min_distance, distance(points[i], points[j]))
+    return min_distance
+def distance(p1, p2):
+    return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+points = [(2, 3), (12, 30), (40, 50), (5, 1), (12, 10), (3, 4)]
+min_distance = closest_pair(points)
+print(f"Minimum distance between closest pair: {min_distance:.2f}")
